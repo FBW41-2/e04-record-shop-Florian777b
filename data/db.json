@@ -1,4 +1,5 @@
-[
+{ "records":
+  [
   {
     "name": "Linkin park",
     "title": "Unforgiven",
@@ -14,4 +15,4 @@
     "title": "La isla bonita",
     "year": "1955"
   }
-]
+]}
