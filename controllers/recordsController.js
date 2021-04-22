@@ -2,11 +2,14 @@ const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync('data/db.json');
 const db = low(adapter);
+const mongodb = require('mongodb')
 
 
 exports.getRecords = (req, res, next) => {
-    const records = db.get('records').value()
-    res.status(200).send(records);
+    //acces db from global object    // select all records
+    req.app.locals.db.collection('records').find().toArray((err,docs) => {
+        res.json(docs)
+    })
 }
 
 exports.getRecord = (req, res, next) => {
@@ -17,8 +20,10 @@ exports.getRecord = (req, res, next) => {
 
 exports.deleteRecord = (req, res, next) => {
     const { id } = req.params;
-    const record = db.get('records').remove({ id }).write();
-    res.status(200).send(record);
+    req.app.locals.db.collection(’records’).deleteOne({_id: id}, (result) => {
+        console.log(result)
+        res.json({deleted : true})
+    })
 }
 
 exports.updateRecord = (req, res, next) => {
@@ -30,10 +35,8 @@ exports.updateRecord = (req, res, next) => {
 
 exports.addRecord = (req, res, next) => {
     const record = req.body;
-    db.get('records').push(record)
-        .last()
-        .assign({ id: Date.now().toString() })
-        .write()
-
-    res.status(200).send(record);
+    //acces db from global object
+    req.app.locals.db.collection(’records’).insertOne(record, (err, entry) => {
+        res.json(entry)
+    })
 }
