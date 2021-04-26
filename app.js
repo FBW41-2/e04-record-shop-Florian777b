@@ -22,8 +22,8 @@ app.use(logger('dev'));
 
 /** CONNECT TO MONGODB **/
 async function connectDB() {
-    const url = "mongodb+srv://database-people-allover:Ne.k6W29d@Y8FSF@cluster0.rjmty.mongodb.net/record-shop?retryWrites=true&w=majority"
-    const client = new MongoClient(url)
+    const url = "mongodb+srv://database-people-allover:Ne.k6W29d@Y8FSF@cluster0.rjmty.mongodb.net/records-shop?retryWrites=true&w=majority"
+    const client = new MongoClient(url, {useUnifiedTopology: true });
 
     try {
         await client.connect()
@@ -33,9 +33,7 @@ async function connectDB() {
         await listDatabases(client)
     } catch (error) {
         console.error(error)
-    } finally {
-        await client.close()
-    }
+    } 
 }
 
 async function listDatabases(client) {
