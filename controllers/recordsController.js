@@ -1,4 +1,3 @@
-const { restart } = require("nodemon");
 const Record = require("../models/Record");
 
 exports.getRecords = (req, res, next) => {
@@ -18,8 +17,10 @@ exports.getRecord = (req, res, next) => {
 
 exports.deleteRecord = (req, res, next) => {
   const { id } = req.params;
-  const record = db.get("records").remove({ id }).write();
-  res.status(200).send(record);
+  Record.findByIdAndRemove(id, (err, entry) => {
+      if (err) return res.json({ error: err });
+      res.json({ deleted: entry });
+  });
 };
 
 exports.updateRecord = (req, res, next) => {
