@@ -24,24 +24,27 @@ const app = express();
 /** LOGGING */
 app.use(logger("dev"));
 
+// console.log(new Error('oders not found'))
+
 
 
 
 /** ENV VARIABLES **/
-const dBURL = process.env.DB_URL;
-const dBPassword = process.env.DB_PASSWORD;
-const dBUser = process.env.DB_USER;
+const dbURL = process.env.DB_URL;
+const dbPassword = process.env.DB_PASSWORD;
+const dbUser = process.env.DB_USER;
+
+
 /**CONNECT TO DB */
+const localDbURI = "mongodb://localhost:27017/record-shop"
+const atlasURI = `mongodb+srv://${dbUser}:${dbPassword}@${dbURL}`
 mongoose.connect(
-  process.env.NODE_ENV == "test"
-    ? "mongodb://localhost:27017/record-shop"
-    : `mongodb+srv://${dBUser}:${dBPassword}@${dBURL}`,
-  {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true,
-  }
-);
+        process.env.NODE_ENV == 'autograding' ? localDbURI : atlasURI,
+    {
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useUnifiedTopology: true
+});
 mongoose.connection.on("error", console.error);
 mongoose.connection.on("open", function () {
   console.log("Database connection established...");

@@ -1,10 +1,15 @@
 const Order = require("../models/Order");
+// const createError = require('http-errors')
+
+
+
 exports.getOrders = (req, res, next) => {
     Order.find((err, entry) => {
         if (err) return console.error(err);
         res.json(entry);
     });
 };
+
 exports.getOrder = (req, res, next) => {
     const { id } = req.params;
     Order.findById(id, (err, entry) => {

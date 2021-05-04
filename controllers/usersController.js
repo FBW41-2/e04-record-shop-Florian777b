@@ -1,4 +1,7 @@
 const User = require("../models/User")
+
+
+
 exports.getUsers = (req, res, next) => {
     User.find((err, users) => {
         if (err) return console.error(err);
