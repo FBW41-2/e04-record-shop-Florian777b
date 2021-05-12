@@ -1,5 +1,15 @@
 const express = require("express");
 const router = express.Router();
+const { body } = require('express-validator');
+const validator = require('../middleware/validator')
+
+const userValidators = [
+  body("email").isEmail().withMessage("WHere is my Tequila????"),
+  body("password").isStrongPassword({ returnScore: false}).withMessage("Are you kiddin me?")
+  // body("firstname").is
+
+];
+
 
 const {
   getUsers,
@@ -12,7 +22,7 @@ const {
 router
   .route("/")
   .get(getUsers)
-  .post(addUser);
+  .post(userValidators,validator,addUser);
 
 router
   .route("/:id")
